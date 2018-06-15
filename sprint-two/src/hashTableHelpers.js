@@ -41,7 +41,13 @@ var LimitedArray = function(limit) {
   };
 
   limitedArray._doubleTable = function() {
-    var newLimitArray = LimitedArray(this._limit * 2);
+    var newArray = LimitedArray(this._limit * 2);
+    this.each(function(elem) {
+      for (var i = 0; i < elem.length; i++) {
+        newArray.insert(elem[i][0], elem[i][1]);
+      }
+    });
+    limitedArray = newArray;
   };
   limitedArray._halveTable = function() {
 
