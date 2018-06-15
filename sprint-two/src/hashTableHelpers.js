@@ -21,17 +21,13 @@ var LimitedArray = function(limit) {
   };
   limitedArray.set = function(index, value) {
     checkLimit(index);
-    var counter = 0;
-    storage.each(function(elem) {
-      if (elem) {
-        counter++;
-      }
-    });
-    if (counter >= (storage.length * .75)) {
+    
+    if (this._counter >= (storage.length * .75)) {
       this.doubleTable();
-    } else if (counter <= (storage.length * .25)) {
+    } else if (this._counter <= (storage.length * .25)) {
       this.halveTable();
     }
+    
     storage[index] = value;
   };
   limitedArray.each = function(callback) {
@@ -47,10 +43,17 @@ var LimitedArray = function(limit) {
         newArray.insert(elem[i][0], elem[i][1]);
       }
     });
-    limitedArray = newArray;
+    limitedArray = newArray; //or maybe 'this' instead of limitedArray
   };
-  limitedArray._halveTable = function() {
 
+  limitedArray._halveTable = function() {
+    var newArray = LimitedArray(this._limit * 0.5);
+    this.each(function(elem) {
+      for (var i = 0; i < elem.length; i++) {
+        newArray.insert(elem[i][0], elem[i][1]);
+      }
+    });
+    limitedArray = newArray; //or maybe 'this' instead of limitedArray
   };
 
   var checkLimit = function(index) {
