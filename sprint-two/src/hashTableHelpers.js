@@ -21,12 +21,30 @@ var LimitedArray = function(limit) {
   };
   limitedArray.set = function(index, value) {
     checkLimit(index);
+    var counter = 0;
+    storage.each(function(elem) {
+      if (elem) {
+        counter++;
+      }
+    });
+    if (counter >= (storage.length * .75)) {
+      this.doubleTable();
+    } else if (counter <= (storage.length * .25)) {
+      this.halveTable();
+    }
     storage[index] = value;
   };
   limitedArray.each = function(callback) {
     for (var i = 0; i < storage.length; i++) {
       callback(storage[i], i, storage);
     }
+  };
+
+  limitedArray._doubleTable = function() {
+    var newLimitArray = LimitedArray(this._limit * 2);
+  };
+  limitedArray._halveTable = function() {
+
   };
 
   var checkLimit = function(index) {
