@@ -4,6 +4,7 @@ var BinarySearchTree = function(value) {
   newBST.right = null;
   newBST.value = value;
   newBST.depth = 1;
+  
   // newBST.minDepth = 1;
   // newBST.maxDepth = 1;
   return newBST;
@@ -25,9 +26,6 @@ BinarySearchTree.prototype = {
       if (this.right === null) {
         this.right = newNode;
         newNode.depth = this.depth + 1;
-        if (this.depth > this.maxDepth) {
-          this.maxDepth = this.depth;
-        }
       } else {
         this.right.insert(value);
       }
@@ -36,15 +34,12 @@ BinarySearchTree.prototype = {
       if (this.left === null) {
         this.left = newNode;
         newNode.depth = this.depth + 1;
-        if (this.depth > this.maxDepth) {
-          this.maxDepth = this.depth;
-        }
       } else {
         this.left.insert(value);
       }
     }
     if (this._isUnbalanced()) {
-      console.log('Rebalancing...');
+      this._rebalance();
     }
   },
   
@@ -87,8 +82,14 @@ BinarySearchTree.prototype = {
 
   },
 
+// if (this.root === null) {
+//           newNode.root = this;
+//         } else {
+//           newNode.root = this.root;
+
   _rebalance: function() {
     var nodeValues = [];
+    var oldTree = this;
     this.depthFirstLog(function(node) {
       nodeValues.push(node.value);
     });
@@ -97,11 +98,14 @@ BinarySearchTree.prototype = {
     });
     var medianIndex = Math.ceil(nodeValues.length / 2);
     var medianValue = nodeValues.splice(medianIndex, 1).pop();
-    var rebalanced = BinarySearchTree(medianValue);
+    // var rebalanced = BinarySearchTree(medianValue);
+    this.value = medianValue;
+    this.left = null;
+    this.right = null;
     nodeValues.forEach(function(nodeVal) {
-      rebalanced.insert(nodeVal);
+      oldTree.insert(nodeVal);
     });
-    return rebalanced;
+    //return rebalanced;
   },
 
   _isUnbalanced: function() {
