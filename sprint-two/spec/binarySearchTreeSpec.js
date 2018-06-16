@@ -50,7 +50,7 @@ describe('binarySearchTree', function() {
   // });
   it('should execute a callback on every node, breadth-first', function() {
     var array = [];
-    var func = function(value) { array.push(value); };
+    var func = function(val) {array.push(val.value); };
     binarySearchTree.insert(2);
     binarySearchTree.insert(3);
     binarySearchTree.insert(7);

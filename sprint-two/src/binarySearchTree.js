@@ -61,7 +61,18 @@ BinarySearchTree.prototype = {
   },
 
   breadthFirstLog: function(cb) {
-    cb(this.value);
+    var q = [];
+    q.push(this);
+    while (q.length > 0) {
+      cb(q[0]);
+      if (q[0].left) {
+        q.push(q[0].left);
+      }
+      if (q[0].right) {
+        q.push(q[0].right);
+      }
+      q.shift();
+    }
 
   }
 };
