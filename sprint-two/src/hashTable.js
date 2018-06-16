@@ -29,7 +29,6 @@ HashTable.prototype.insert = function(k, v) {
   this._storage.get(index).push([k, v]);
 
   if (this._counter >= (this._limit * .75)) {
-    console.log('resizing');
     this._resize(this._limit * 2);
   }
 };
@@ -71,7 +70,6 @@ HashTable.prototype._resize = function(value) {
   this._counter = 0;
   oldStorage.each(function(elem) {
     for (var i = 0; i < elem.length; i++) {
-      console.log(_this);
       _this.insert(elem[i][0], elem[i][1]);
     }
   });
