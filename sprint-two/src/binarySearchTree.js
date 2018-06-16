@@ -3,6 +3,7 @@ var BinarySearchTree = function(value) {
   newBST.left = null;
   newBST.right = null;
   newBST.value = value;
+  newBST.depth = 1;
   return newBST;
 };
 
@@ -21,6 +22,7 @@ BinarySearchTree.prototype = {
     if (value > this.value) {
       if (this.right === null) {
         this.right = newNode;
+        newNode.depth = this.depth + 1;
       } else {
         this.right.insert(value);
       }
@@ -28,6 +30,7 @@ BinarySearchTree.prototype = {
     if (value < this.value) {
       if (this.left === null) {
         this.left = newNode;
+        newNode.depth = this.depth + 1;
       } else {
         this.left.insert(value);
       }
@@ -55,6 +58,11 @@ BinarySearchTree.prototype = {
     if (this.right !== null) {
       this.right.depthFirstLog(cb);
     }
+  },
+
+  breadthFirstLog: function(cb) {
+    cb(this.value);
+
   }
 };
 
