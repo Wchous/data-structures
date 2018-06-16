@@ -4,6 +4,8 @@ var BinarySearchTree = function(value) {
   newBST.right = null;
   newBST.value = value;
   newBST.depth = 1;
+  // newBST.minDepth = 1;
+  // newBST.maxDepth = 1;
   return newBST;
 };
 
@@ -23,6 +25,9 @@ BinarySearchTree.prototype = {
       if (this.right === null) {
         this.right = newNode;
         newNode.depth = this.depth + 1;
+        if (this.depth > this.maxDepth) {
+          this.maxDepth = this.depth;
+        }
       } else {
         this.right.insert(value);
       }
@@ -31,10 +36,16 @@ BinarySearchTree.prototype = {
       if (this.left === null) {
         this.left = newNode;
         newNode.depth = this.depth + 1;
+        if (this.depth > this.maxDepth) {
+          this.maxDepth = this.depth;
+        }
       } else {
         this.left.insert(value);
       }
-    }   
+    }
+    if (this._isUnbalanced()) {
+      console.log('Rebalancing...');
+    }
   },
   
   contains: function(target) {
@@ -51,7 +62,7 @@ BinarySearchTree.prototype = {
   },
   
   depthFirstLog: function(cb) {
-    cb(this.value);
+    cb(this);
     if (this.left !== null) {
       this.left.depthFirstLog(cb);
     }
@@ -74,6 +85,37 @@ BinarySearchTree.prototype = {
       q.shift();
     }
 
+  },
+
+  _rebalance: function() {
+    var nodeValues = [];
+    this.depthFirstLog(function(node) {
+      nodeValues.push(node.value);
+    });
+    nodeValues.sort(function(a, b) {
+      return a - b;
+    });
+    var medianIndex = Math.ceil(nodeValues.length / 2);
+    var medianValue = nodeValues.splice(medianIndex, 1).pop();
+    var rebalanced = BinarySearchTree(medianValue);
+    nodeValues.forEach(function(nodeVal) {
+      rebalanced.insert(nodeVal);
+    });
+    return rebalanced;
+  },
+
+  _isUnbalanced: function() {
+    var depthArr = [];
+
+    this.depthFirstLog(function(node) {
+      if (node.left === null && node.right === null) {
+        depthArr.push(node.depth);
+      }
+    });
+    var minDepth = Math.min(...depthArr);
+    var maxDepth = Math.max(...depthArr);
+
+    return maxDepth > (minDepth * 2);
   }
 };
 
